@@ -23,16 +23,26 @@ public class CFruit {
         this.price = 0.0;
     }
 
+    public CFruit(Long id, String name, String country, Double price) {
+        this.id = id;
+        this.name = name;
+        this.country = country;
+        this.price = price;
+    }
+
     public CFruit(String name, String country, Double price) {
         this.name = name;
         this.country = country;
         this.price = price;
     }
 
-    public CFruit(Long id, String name, String country, Double price) {
+    public CFruit(String name, Double price) {
         this.name = name;
-        this.country = country;
         this.price = price;
+    }
+
+    public CFruit(String country) {
+        this.country = country;
     }
 
     public Long getId() {

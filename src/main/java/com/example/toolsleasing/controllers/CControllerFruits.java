@@ -100,17 +100,18 @@ public class CControllerFruits {
         return "Загружено!";
     }
 
-//    @GetMapping(value = "/report")
-//    public ResponseEntity<ByteArrayResource> report()
-//    {
-//        byte[] report = serviceReport.createReport(); // creates the workbook
-//        HttpHeaders header = new HttpHeaders();
-//        header.setContentType(new MediaType("application", "force-download"));
-//        header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Report.docx");
-//        if (report.length>0)
-//            return new ResponseEntity<>(new ByteArrayResource(report),
-//                    header, HttpStatus.CREATED);
-//        else
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
+    @GetMapping(value = "/report/{report_number}")
+    public ResponseEntity<ByteArrayResource> report(
+            @PathVariable int report_number
+    ) {
+        byte[] report = serviceReport.createReport(report_number); // creates the workbook
+        HttpHeaders header = new HttpHeaders();
+        header.setContentType(new MediaType("application", "force-download"));
+        header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Report.docx");
+        if (report.length>0)
+            return new ResponseEntity<>(new ByteArrayResource(report),
+                    header, HttpStatus.CREATED);
+        else
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
