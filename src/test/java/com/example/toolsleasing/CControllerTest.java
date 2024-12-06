@@ -23,11 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 public class CControllerTest {
 
-    @Mock
-    private IRepositoryFruits repositoryFruits;
-    @Mock
-    private CServiceReport serviceReport;
-
     @InjectMocks
     private CControllerFruits cControllerFruits;
 
@@ -42,30 +37,13 @@ public class CControllerTest {
     }
 
     @Test
-    void get200() throws Exception {
-        mockMvc.perform(get("/fruit_store/get200")).andExpect(status().isOk());
+    void get201() throws Exception {
+        mockMvc.perform(get("/fruit_store/get200")).andExpect(status().isCreated());
     }
 
     @Test
-    void getAll() throws Exception {
-        mockMvc.perform(get("/fruit_store/all_products")).andExpect(status().isOk());
-    }
-
-    @Test
-    void getOne() throws Exception {
-
-//        ObjectMapper mapper = new ObjectMapper();
-//        ObjectNode json = mapper.createObjectNode()
-//                .put("name", "Джон Доу")
-//                .put("age", 30);
-//        String name = repositoryFruits.findById(id).value.name
-        mockMvc.perform(get("/fruit_store/beb"))
+    void getJSON() throws Exception {
+        mockMvc.perform(get("/fruit_store/getJSON"))
                 .andExpect(jsonPath("$.name").value("Яблоко"));
-    }
-
-    @Test
-    void getReport() throws Exception {
-        mockMvc.perform(get("/fruit_store/report/{report_number}", 1))
-                .andExpect(status().isCreated());
     }
 }

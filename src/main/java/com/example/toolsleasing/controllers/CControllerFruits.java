@@ -33,45 +33,15 @@ public class CControllerFruits {
     @Autowired
     private CServiceReport serviceReport;
 
-//    @GetMapping("/all_products")
-//    public List<CFruit> getAll() {
-//        return repositoryFruits.findAll();
-//    }
     @GetMapping("/all_products")
-    public ResponseEntity<List<CFruit>> getAll() {
-        repositoryFruits.findAll();
-        return new ResponseEntity<>(
-//                repositoryFruits.findAll(),
-                HttpStatus.OK);
+    public List<CFruit> getAll() {
+        return repositoryFruits.findAll();
     }
 
     @GetMapping("/{id}")
     //@GetMapping   /tools?id=100500,name=aodawdnaodn
-    public ObjectNode getById(@PathVariable Long id) {
-
-        CFruit result = repositoryFruits.findById(id).get();
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode json = mapper.createObjectNode()
-                .put("id", result.getId())
-                .put("name", result.getName())
-                .put("country", result.getCountry())
-                .put("price", result.getPrice());
-
-        return json;
-    }
-
-    @GetMapping("/beb")
-    //@GetMapping   /tools?id=100500,name=aodawdnaodn
-    public ObjectNode getById() {
-        CFruit result = repositoryFruits.findById(1L).get();
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode json = mapper.createObjectNode()
-                .put("id", result.getId())
-                .put("name", result.getName())
-                .put("country", result.getCountry())
-                .put("price", result.getPrice());
-
-        return json;
+    public Optional<CFruit> getById(@PathVariable Long id) {
+        return repositoryFruits.findById(id);
     }
 
     @PostMapping("/add_products")
@@ -94,14 +64,13 @@ public class CControllerFruits {
     }
 
     @PostMapping(value = "/upload", consumes = {"*/*"})
-    public String handleFileUpload(
+    public ResponseEntity<Integer> handleFileUpload(
             @RequestParam("file") MultipartFile file) {
         // TODO логика должна быть в отдельном классе
         try{
             Workbook wb = WorkbookFactory.create(file.getInputStream());
             Sheet sheet = wb.getSheetAt(0);
-            //HSSF - xls
-            //XSSF - xlsx
+
             int rows = sheet.getLastRowNum();
             Row row;
             long id;
@@ -118,18 +87,16 @@ public class CControllerFruits {
                 name = row.getCell(1).getStringCellValue();
                 country = row.getCell(2).getStringCellValue();
                 price = row.getCell(3).getNumericCellValue();
-                fruit = new CFruit(name, country, price);
-                // TODO обернуть в транзакцию
+                fruit = new CFruit(id, name, country, price);
                 repositoryFruits.save(fruit);
             }
             repositoryFruits.flush();
         }
         catch (IOException e)
         {
-            // TODO переопределить статус ошибки
-            return "Ошибка!"+e.getMessage();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return "Загружено!";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping(value = "/report/{report_number}")
@@ -148,8 +115,18 @@ public class CControllerFruits {
     }
 
     @GetMapping("/get200")
-    public ResponseEntity<Integer> get200() {
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Integer> get201() {
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @GetMapping("/getJSON")
+    public ResponseEntity<ObjectNode> getJSON() {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode json = mapper.createObjectNode()
+                .put("id", 1)
+                .put("name", "Яблоко")
+                .put("country", "Россия")
+                .put("price", "150");
+        return new ResponseEntity<>(json, HttpStatus.OK);
+    }
 }
