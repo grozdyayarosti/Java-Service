@@ -38,7 +38,7 @@ public class CControllerTest {
 
     @Test
     void get201() throws Exception {
-        mockMvc.perform(get("/fruit_store/get200")).andExpect(status().isCreated());
+        mockMvc.perform(get("/fruit_store/get201")).andExpect(status().isCreated());
     }
 
     @Test

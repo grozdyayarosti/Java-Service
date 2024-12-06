@@ -114,7 +114,7 @@ public class CControllerFruits {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @GetMapping("/get200")
+    @GetMapping("/get201")
     public ResponseEntity<Integer> get201() {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
