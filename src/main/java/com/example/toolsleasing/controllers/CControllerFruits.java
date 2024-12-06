@@ -3,6 +3,8 @@ package com.example.toolsleasing.controllers;
 import com.example.toolsleasing.model.CFruit;
 import com.example.toolsleasing.repositories.IRepositoryFruits;
 import com.example.toolsleasing.services.CServiceReport;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -31,15 +33,45 @@ public class CControllerFruits {
     @Autowired
     private CServiceReport serviceReport;
 
+//    @GetMapping("/all_products")
+//    public List<CFruit> getAll() {
+//        return repositoryFruits.findAll();
+//    }
     @GetMapping("/all_products")
-    public List<CFruit> getAll() {
-        return repositoryFruits.findAll();
+    public ResponseEntity<List<CFruit>> getAll() {
+        repositoryFruits.findAll();
+        return new ResponseEntity<>(
+//                repositoryFruits.findAll(),
+                HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     //@GetMapping   /tools?id=100500,name=aodawdnaodn
-    public Optional<CFruit> getById(@PathVariable Long id) {
-        return repositoryFruits.findById(id);
+    public ObjectNode getById(@PathVariable Long id) {
+
+        CFruit result = repositoryFruits.findById(id).get();
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode json = mapper.createObjectNode()
+                .put("id", result.getId())
+                .put("name", result.getName())
+                .put("country", result.getCountry())
+                .put("price", result.getPrice());
+
+        return json;
+    }
+
+    @GetMapping("/beb")
+    //@GetMapping   /tools?id=100500,name=aodawdnaodn
+    public ObjectNode getById() {
+        CFruit result = repositoryFruits.findById(1L).get();
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode json = mapper.createObjectNode()
+                .put("id", result.getId())
+                .put("name", result.getName())
+                .put("country", result.getCountry())
+                .put("price", result.getPrice());
+
+        return json;
     }
 
     @PostMapping("/add_products")
@@ -114,4 +146,10 @@ public class CControllerFruits {
         else
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @GetMapping("/get200")
+    public ResponseEntity<Integer> get200() {
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

@@ -12,6 +12,7 @@ import java.util.List;
 
 @Repository
 public interface IRepositoryFruits extends JpaRepository<CFruit, Long> {
+
     //CrudRepository
     @Query(
             value = """
