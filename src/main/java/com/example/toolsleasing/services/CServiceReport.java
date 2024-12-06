@@ -1,5 +1,5 @@
 package com.example.toolsleasing.services;
-import com.example.toolsleasing.model.C2ReportItem;
+import com.example.toolsleasing.model.CReport2Item;
 import com.example.toolsleasing.model.CReportItem;
 import com.example.toolsleasing.repositories.IRepositoryFruits;
 import org.apache.poi.xwpf.usermodel.*;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+
 @Component
 public class CServiceReport {
     @Autowired
@@ -15,14 +16,12 @@ public class CServiceReport {
     public byte[] createReport(int report_number)  {
         try(XWPFDocument document = new XWPFDocument())
         {
-            //Заголовок
             XWPFParagraph paragraph = document.createParagraph();
             paragraph.setAlignment(ParagraphAlignment.CENTER);
             XWPFRun run = paragraph.createRun();
             run.setFontSize(16);
             run.setFontFamily("Times New Roman");
             run.setBold(true);
-            // create table with 3 rows and 4 columns
             XWPFTable table = document.createTable(1, 2);
             table.setWidth("100%");
 
@@ -42,9 +41,9 @@ public class CServiceReport {
                 run.setText("Популярность стран-поставщиков");
                 addColumn(table, 0, "Страна");
                 addColumn(table, 1, "Кол-во поставляемых фруктов");
-                List<C2ReportItem> items = repositoryFruits.supplyPopularCountries();
+                List<CReport2Item> items = repositoryFruits.supplyPopularCountries();
                 XWPFTableRow row;
-                for (C2ReportItem item : items) {
+                for (CReport2Item item : items) {
                     row = table.createRow();
                     fillCell(row, 0, item.getCountry());
                     fillCell(row, 1, item.getFruitsCount().toString());

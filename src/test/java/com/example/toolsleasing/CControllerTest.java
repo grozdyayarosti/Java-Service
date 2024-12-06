@@ -1,21 +1,14 @@
 package com.example.toolsleasing;
 
 import com.example.toolsleasing.controllers.CControllerFruits;
-import com.example.toolsleasing.repositories.IRepositoryFruits;
-import com.example.toolsleasing.services.CServiceReport;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,6 +37,9 @@ public class CControllerTest {
     @Test
     void getJSON() throws Exception {
         mockMvc.perform(get("/fruit_store/getJSON"))
-                .andExpect(jsonPath("$.name").value("Яблоко"));
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.name").value("Яблоко"))
+                .andExpect(jsonPath("$.country").value("Россия"))
+                .andExpect(jsonPath("$.price").value(150));
     }
 }

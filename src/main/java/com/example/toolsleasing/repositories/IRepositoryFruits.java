@@ -1,6 +1,6 @@
 package com.example.toolsleasing.repositories;
 
-import com.example.toolsleasing.model.C2ReportItem;
+import com.example.toolsleasing.model.CReport2Item;
 import com.example.toolsleasing.model.CReportItem;
 import com.example.toolsleasing.model.CFruit;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -34,5 +34,5 @@ public interface IRepositoryFruits extends JpaRepository<CFruit, Long> {
               ORDER BY cnt DESC;
             """,
             nativeQuery = true)
-    List<C2ReportItem> supplyPopularCountries();
+    List<CReport2Item> supplyPopularCountries();
 }

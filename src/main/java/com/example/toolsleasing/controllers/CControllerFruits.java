@@ -3,12 +3,9 @@ package com.example.toolsleasing.controllers;
 import com.example.toolsleasing.model.CFruit;
 import com.example.toolsleasing.repositories.IRepositoryFruits;
 import com.example.toolsleasing.services.CServiceReport;
+import com.example.toolsleasing.services.CServiceWorkbook;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.core.io.ByteArrayResource;
@@ -33,19 +30,24 @@ public class CControllerFruits {
     @Autowired
     private CServiceReport serviceReport;
 
+    @Autowired
+    private CServiceWorkbook serviceWorkbook;
+
     @GetMapping("/all_products")
-    public List<CFruit> getAll() {
+    public List<CFruit> getAll()
+    {
         return repositoryFruits.findAll();
     }
 
     @GetMapping("/{id}")
-    //@GetMapping   /tools?id=100500,name=aodawdnaodn
-    public Optional<CFruit> getById(@PathVariable Long id) {
+    public Optional<CFruit> getById(@PathVariable Long id)
+    {
         return repositoryFruits.findById(id);
     }
 
     @PostMapping("/add_products")
-    public CFruit create(@RequestBody CFruit fruit) {
+    public CFruit create(@RequestBody CFruit fruit)
+    {
         return repositoryFruits.save(fruit);
     }
 
@@ -59,38 +61,17 @@ public class CControllerFruits {
     }
 
     @DeleteMapping("/remove_product/{id}")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id)
+    {
         repositoryFruits.deleteById(id);
     }
 
     @PostMapping(value = "/upload", consumes = {"*/*"})
     public ResponseEntity<Integer> handleFileUpload(
-            @RequestParam("file") MultipartFile file) {
-        // TODO логика должна быть в отдельном классе
-        try{
-            Workbook wb = WorkbookFactory.create(file.getInputStream());
-            Sheet sheet = wb.getSheetAt(0);
-
-            int rows = sheet.getLastRowNum();
-            Row row;
-            long id;
-            String name;
-            String country;
-            double price;
-            CFruit fruit;
-            for (int i=1; i<=rows; i++)
-            {
-                row = sheet.getRow(i);
-                if (row==null)
-                    continue;
-                id = (long)(row.getCell(0).getNumericCellValue());
-                name = row.getCell(1).getStringCellValue();
-                country = row.getCell(2).getStringCellValue();
-                price = row.getCell(3).getNumericCellValue();
-                fruit = new CFruit(id, name, country, price);
-                repositoryFruits.save(fruit);
-            }
-            repositoryFruits.flush();
+            @RequestParam("file") MultipartFile file)
+    {
+        try {
+            serviceWorkbook.uploadWorkbook(file);
         }
         catch (IOException e)
         {
@@ -126,7 +107,7 @@ public class CControllerFruits {
                 .put("id", 1)
                 .put("name", "Яблоко")
                 .put("country", "Россия")
-                .put("price", "150");
+                .put("price", 150);
         return new ResponseEntity<>(json, HttpStatus.OK);
     }
 }

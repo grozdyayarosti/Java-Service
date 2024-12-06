@@ -1,8 +1,8 @@
 package com.example.toolsleasing.model;
 
-public class C2ReportItem extends CFruit
+public class CReport2Item extends CFruit
 {
-    public C2ReportItem(String country, Long fruitsCount)
+    public CReport2Item(String country, Long fruitsCount)
     {
         super(country);
         setFruitsCount(fruitsCount);
