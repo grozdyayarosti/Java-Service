@@ -1,6 +1,6 @@
 package com.example.toolsleasing.services;
-import com.example.toolsleasing.model.CHighCostReportItem;
-import com.example.toolsleasing.model.CPopularCountriesReportItem;
+import com.example.toolsleasing.model.C2ReportItem;
+import com.example.toolsleasing.model.CReportItem;
 import com.example.toolsleasing.repositories.IRepositoryFruits;
 import org.apache.poi.xwpf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,43 +21,36 @@ public class CServiceReport {
             XWPFRun run = paragraph.createRun();
             run.setFontSize(16);
             run.setFontFamily("Times New Roman");
-//            run.setText("Самые дорогие фрукты");
             run.setBold(true);
             // create table with 3 rows and 4 columns
-            XWPFTable table = document
-                    .createTable(1, 2);
+            XWPFTable table = document.createTable(1, 2);
             table.setWidth("100%");
 
-
-//            if (report_number == 1) {
+            if (report_number == 1) {
                 run.setText("Самые дорогие фрукты");
                 addColumn(table, 0, "Фрукт");
                 addColumn(table, 1, "Цена, р");
-                List<CHighCostReportItem> items;
-                items = repositoryFruits.topExpensiveFruits();
-                //TODO реализовать наследование
-//            }
-//            else {
-//                run.setText("Популярность стран-поставщиков");
-//                addColumn(table, 0, "Страна");
-//                addColumn(table, 1, "Поставляемые фрукты");
-//                List<CPopularCountriesReportItem> items;
-//                items = repositoryFruits.supplyPopularCountries();
-//            }
-
-            XWPFTableRow row;
-//            XWPFTableCell cell;
-            for (CHighCostReportItem item : items) {
-                row = table.createRow();
-                fillCell(row, 0, item.getName());
-                fillCell(row, 1, item.getPrice().toString());
-//                cell = row.getCell(1);
-//                cell.setText(item.getCountry());
-//                cell = row.getCell(1);
-//                cell.setText(item.getPrice().toString());
-//                cell = row.getCell(2);
-//                cell.setText(item.getTotalLeaseCount().toString());
+                List<CReportItem> items = repositoryFruits.topExpensiveFruits();
+                XWPFTableRow row;
+                for (CReportItem item : items) {
+                    row = table.createRow();
+                    fillCell(row, 0, item.getName());
+                    fillCell(row, 1, item.getPrice().toString());
+                }
             }
+            else {
+                run.setText("Популярность стран-поставщиков");
+                addColumn(table, 0, "Страна");
+                addColumn(table, 1, "Кол-во поставляемых фруктов");
+                List<C2ReportItem> items = repositoryFruits.supplyPopularCountries();
+                XWPFTableRow row;
+                for (C2ReportItem item : items) {
+                    row = table.createRow();
+                    fillCell(row, 0, item.getCountry());
+                    fillCell(row, 1, item.getFruitsCount().toString());
+                }
+            }
+
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             document.write(stream);
             return stream.toByteArray();

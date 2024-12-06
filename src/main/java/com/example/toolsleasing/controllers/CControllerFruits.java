@@ -104,7 +104,7 @@ public class CControllerFruits {
     public ResponseEntity<ByteArrayResource> report(
             @PathVariable int report_number
     ) {
-        byte[] report = serviceReport.createReport(report_number); // creates the workbook
+        byte[] report = serviceReport.createReport(report_number);
         HttpHeaders header = new HttpHeaders();
         header.setContentType(new MediaType("application", "force-download"));
         header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Report.docx");
