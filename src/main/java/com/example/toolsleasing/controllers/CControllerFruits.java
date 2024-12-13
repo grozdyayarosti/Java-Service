@@ -84,6 +84,8 @@ public class CControllerFruits {
     public ResponseEntity<ByteArrayResource> report(
             @PathVariable int report_number
     ) {
+        if (!(report_number == 1 | report_number == 2))
+            return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
         byte[] report = serviceReport.createReport(report_number);
         HttpHeaders header = new HttpHeaders();
         header.setContentType(new MediaType("application", "force-download"));

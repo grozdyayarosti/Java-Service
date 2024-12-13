@@ -37,7 +37,7 @@ public class CServiceReport {
                     fillCell(row, 1, item.getPrice().toString());
                 }
             }
-            else {
+            else if (report_number == 2) {
                 run.setText("Популярность стран-поставщиков");
                 addColumn(table, 0, "Страна");
                 addColumn(table, 1, "Кол-во поставляемых фруктов");

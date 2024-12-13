@@ -30,12 +30,6 @@ public class CFruit {
         this.price = price;
     }
 
-    public CFruit(String name, String country, Double price) {
-        this.name = name;
-        this.country = country;
-        this.price = price;
-    }
-
     public CFruit(String name, Double price) {
         this.name = name;
         this.price = price;
